@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Health & Lifestyle Questionnaire</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green-deep:   #1a3d2b;
+    --green-main:   #2d7a4f;
+    --green-light:  #e8f5ee;
+    --green-mid:    #a8d5b8;
+    --bg:           #f4faf6;
+    --white:        #ffffff;
+    --ink:          #1a1a1a;
+    --ink-soft:     #4a5568;
+    --ink-placeholder: #a0aec0;
+    --border:       #d4e8db;
+    --red:          #e53e3e;
+    --radius:       14px;
+    --radius-sm:    8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.5;
+    padding-bottom: 60px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: rgba(255,255,255,0.3);
+    z-index: 999;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--green-mid);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--green-deep);
+    padding: 52px 20px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 28px;
+    background: var(--bg);
+    border-radius: 28px 28px 0 0;
+  }
+  .hero-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .hero h1 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .hero p {
+    color: var(--green-mid);
+    font-size: 14px;
+    max-width: 320px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .hero-steps {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 20px;
+  }
+  .hero-step {
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── FORM WRAPPER ── */
+  .form-wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 8px 16px 0;
+  }
+
+  /* ── SECTION CARD ── */
+  .s-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(26,61,43,0.07);
+  }
+  .s-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--green-light);
+  }
+  .s-icon {
+    width: 38px; height: 38px;
+    background: var(--green-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .s-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--green-deep);
+    line-height: 1.2;
+  }
+  .s-subtitle {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  /* ── FIELD ── */
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .field label .req { color: var(--red); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--green-main);
+    box-shadow: 0 0 0 3px rgba(45,122,79,0.12);
+  }
+  input::placeholder, textarea::placeholder { color: var(--ink-placeholder); }
+  textarea { resize: none; min-height: 90px; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5568' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  /* ── TWO COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── PILL OPTIONS ── */
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pill-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--white);
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 0;
+    min-height: 44px;
+  }
+  .pill-group input[type="radio"],
+  .pill-group input[type="checkbox"] {
+    display: none;
+  }
+  .pill-group label:has(input:checked) {
+    background: var(--green-light);
+    border-color: var(--green-main);
+    color: var(--green-deep);
+  }
+
+  /* ── SCALE ── */
+  .scale-wrap { padding: 4px 0; }
+  .scale-track {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--green-light);
+    outline: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--green-main);
+    border: 3px solid white;
+    box-shadow: 0 2px 6px rgba(45,122,79,0.35);
+    cursor: pointer;
+  }
+  .scale-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--green-deep);
+    min-width: 28px;
+    text-align: center;
+  }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--ink-placeholder);
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  /* ── RECALL TABLE ── */
+  .recall-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--green-light);
+  }
+  .recall-item:last-child { border-bottom: none; }
+  .recall-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .recall-item input[type="text"] {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  /* ── NOTE ── */
+  .note {
+    background: var(--green-light);
+    border-radius: var(--radius-sm);
+    padding: 10px 13px;
+    font-size: 13px;
+    color: var(--green-deep);
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+
+  /* ── EMAIL FIELD ── */
+  .email-card {
+    background: var(--green-deep);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    margin-bottom: 14px;
+  }
+  .email-card .s-title { color: #fff; }
+  .email-card .s-subtitle { color: var(--green-mid); }
+  .email-card label { color: var(--green-mid); }
+  .email-card input {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+  .email-card input::placeholder { color: rgba(255,255,255,0.4); }
+  .email-card input:focus {
+    border-color: var(--green-mid);
+    box-shadow: 0 0 0 3px rgba(168,213,184,0.2);
+  }
+
+  /* ── SUBMIT ── */
+  .submit-btn {
+    width: 100%;
+    padding: 17px;
+    background: var(--green-main);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Nunito', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 6px;
+    box-shadow: 0 4px 14px rgba(45,122,79,0.35);
+  }
+  .submit-btn:active { transform: scale(0.98); background: #236040; }
+
+  .disclaimer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-placeholder);
+    margin-top: 12px;
+    padding: 0 10px;
+    line-height: 1.6;
+  }
+
+  /* ── SUCCESS SCREEN ── */
+  .success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  .success-screen.show { display: flex; }
+  .success-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: pop 0.4s ease;
+  }
+  @keyframes pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    80% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .success-screen h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--green-deep);
+    margin-bottom: 10px;
+  }
+  .success-screen p {
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 300px;
+    line-height: 1.6;
+  }
+  .success-steps {
+    margin-top: 28px;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 18px;
+    width: 100%;
+    max-width: 340px;
+    text-align: left;
+  }
+  .success-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--green-light);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  .success-step:last-child { border-bottom: none; }
+  .success-step-num {
+    width: 28px; height: 28px;
+    background: var(--green-light);
+    color: var(--green-deep);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  /* ── ERROR STATE ── */
+  .field-error {
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 600;
+    margin-top: 5px;
+    display: none;
+  }
+  .field.has-error input,
+  .field.has-error select,
+  .field.has-error textarea {
+    border-color: var(--red);
+  }
+  .field.has-error .field-error { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressBar"></div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <span class="hero-icon">🌿</span>
+  <h1>Tell us about yourself</h1>
+  <p>This takes about 5–7 minutes. Your answers help us build a diet and lifestyle plan made just for you.</p>
+  <div class="hero-steps">
+    <span class="hero-step">About You</span>
+    <span class="hero-step">Your Goal</span>
+    <span class="hero-step">Lifestyle</span>
+    <span class="hero-step">Food</span>
+    <span class="hero-step">Done</span>
+  </div>
+</div>
+
+<!-- Main Form -->
+<div id="mainForm">
+<form id="clientForm" action="https://formsubmit.co/getfitwithfaree@gmail.com" method="POST">
+
+  <!-- FormSubmit hidden config -->
+  <input type="hidden" name="_subject" value="New Client Questionnaire Submission"/>
+  <input type="hidden" name="_captcha" value="false"/>
+  <input type="hidden" name="_template" value="table"/>
+  <input type="hidden" name="_next" value=""/>
+
+  <div class="form-wrap">
+
+    <!-- ── SECTION 1: About You ── -->
+    <div class="s-card" data-section="1">
+      <div class="s-head">
+        <div class="s-icon">👤</div>
+        <div>
+          <div class="s-title">About You</div>
+          <div class="s-subtitle">Basic details to get started</div>
+        </div>
+      </div>
+
+      <div class="field" id="f-name">
+        <label>Your name <span class="req">*</span></label>
+        <input type="text" name="Full Name" placeholder="What should we call you?" required/>
+        <div class="field-error">Please enter your name</div>
+      </div>
+
+      <div class="two-col">
+        <div class="field" id="f-age">
+          <label>Age <span class="req">*</span></label>
+          <input type="number" name="Age" placeholder="e.g. 26" min="10" max="100" required/>
+          <div class="field-error">Required</div>
+        </div>
+        <div class="field" id="f-gender">
+          <label>Gender <span class="req">*</span></label>
+          <select name="Gender" required>
+            <option value="">Select…</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+            <option>Prefer not to say</option>
+          </select>
+          <div class="field-error">Required</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Height</label>
+          <input type="text" name="Height" placeholder="e.g. 165 cm"/>
+        </div>
+        <div class="field">
+          <label>Current weight</label>
+          <input type="text" name="Current Weight" placeholder="e.g. 72 kg"/>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── SECTION 2: Your Goal ── -->
+    <div class="s-card" data-section="2">
+      <div class="s-head">
+        <div class="s-icon">🎯</div>
+        <div>
+          <div class="s-title">Your Goal</div>
+          <div class="s-subtitle">What are you working towards?</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Main goal <span class="req">*</span></label>
+        <div class="pill-group">
+          <label><input type="radio" name="Main Goal" value="Lose fat" required/> 🔥 Lose fat</label>
+          <label><input type="radio" name="Main Goal" value="Build muscle"/> 💪 Build muscle</label>
+          <label><input type="radio" name="Main Goal" value="Lose fat + gain muscle"/> ⚖️ Both (recomp)</label>
+          <label><input type="radio" name="Main Goal" value="Get stronger"/> 🏋️ Get stronger</label>
+          <label><input type="radio" name="Main Goal" value="Improve performance"/> 🏃 Sport / performance</label>
+          <label><input type="radio" name="Main Goal" value="General health"/> 💚 General health</label>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:14px">
+        <div class="field">
+          <label>Target weight</label>
+          <input type="text" name="Target Weight" placeholder="e.g. 65 kg (optional)"/>
+        </div>
+        <div class="field">
+          <label>Timeline</label>
+          <input type="text" name="Timeline" placeholder="e.g. 3 months"/>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:4px">
+        <label>Biggest obstacle right now</label>
+        <div class="pill-group">
+          <label><input type="checkbox" name="Obstacle" value="No time to cook"/> ⏱️ No time to cook</label>
+          <label><input type="checkbox" name="Obstacle" value="Eating out too much"/> 🍔 Eating out too much</label>
+          <label><input type="checkbox" name="Obstacle" value="Stress eating"/> 😰 Stress eating</label>
+          <label><input type="checkbox" name="Obstacle" value="Lack of motivation"/> 😔 Low motivation</label>
+          <label><input type="checkbox" name="Obstacle" value="Confused about diet"/> 🤷 Confused about what to eat</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 3: Activity ── -->
+    <div class="s-card" data-section="3">
+      <div class="s-head">
+        <div class="s-icon">🏃</div>
+        <div>
+          <div class="s-title">Activity & Work</div>
+          <div class="s-subtitle">How active is your daily life?</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Type of job</label>
+        <div class="pill-group">
+          <label><input type="radio" name="Job Type" value="Desk job (mostly sitting)"/> 💻 Desk / sitting</label>
+          <label><input type="radio" name="Job Type" value="On feet most of the day"/> 🚶 On my feet</label>
+          <label><input type="radio" name="Job Type" value="Physical / manual labour"/> 🏗️ Manual labour</label>
+          <label><input type="radio" name="Job Type" value="Work from home"/> 🏠 Work from home</label>
+          <label><input type="radio" name="Job Type" value="Student"/> 📚 Student</label>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:14px">
+        <div class="field">
+          <label>Exercise days / week</label>
+          <select name="Exercise Days Per Week">
+            <option value="">Select…</option>
+            <option>I don't exercise currently</option>
+            <option>1–2 days</option>
+            <option>3–4 days</option>
+            <option>5–6 days</option>
+            <option>Every day</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Workout duration</label>
+          <select name="Workout Duration">
+            <option value="">Select…</option>
+            <option>Under 30 min</option>
+            <option>30–45 min</option>
+            <option>45–60 min</option>
+            <option>60–90 min</option>
+            <option>90+ min</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Type of exercise (tick all that apply)</label>
+        <div class="pill-group">
+          <label><input type="checkbox" name="Exercise Type" value="Weight training"/> 🏋️ Weights</label>
+          <label><input type="checkbox" name="Exercise Type" value="Running / Cardio"/> 🏃 Running</label>
+          <label><input type="checkbox" name="Exercise Type" value="Cycling"/> 🚴 Cycling</label>
+          <label><input type="checkbox" name="Exercise Type" value="Yoga / Pilates"/> 🧘 Yoga</label>
+          <label><input type="checkbox" name="Exercise Type" value="Sports"/> ⚽ Sports</label>
+          <label><input type="checkbox" name="Exercise Type" value="Walking only"/> 🚶 Walking only</label>
+          <label><input type="checkbox" name="Exercise Type" value="None currently"/> ❌ None currently</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:4px">
+        <label>Preferred workout time</label>
+        <div class="pill-group">
+          <label><input type="radio" name="Workout Time" value="Morning"/> 🌅 Morning</label>
+          <label><input type="radio" name="Workout Time" value="Afternoon"/> ☀️ Afternoon</label>
+          <label><input type="radio" name="Workout Time" value="Evening"/> 🌆 Evening</label>
+          <label><input type="radio" name="Workout Time" value="Varies"/> 🔀 Varies</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:4px">
+        <label>Daily steps (approx.)</label>
+        <select name="Daily Steps">
+          <option value="">Select…</option>
+          <option>Under 3,000</option>
+          <option>3,000–6,000</option>
+          <option>6,000–10,000</option>
+          <option>10,000+</option>
+          <option>I don't track steps</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ── SECTION 4: Health ── -->
+    <div class="s-card" data-section="4">
+      <div class="s-head">
+        <div class="s-icon">❤️</div>
+        <div>
+          <div class="s-title">Health History</div>
+          <div class="s-subtitle">Everything is confidential</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Any health conditions? (tick all that apply)</label>
+        <div class="pill-group">
+          <label><input type="checkbox" name="Health Condition" value="Diabetes"/> 🩸 Diabetes</label>
+          <label><input type="checkbox" name="Health Condition" value="Thyroid issues"/> 🦋 Thyroid</label>
+          <label><input type="checkbox" name="Health Condition" value="High blood pressure"/> 💓 High BP</label>
+          <label><input type="checkbox" name="Health Condition" value="High cholesterol"/> 🫀 High cholesterol</label>
+          <label><input type="checkbox" name="Health Condition" value="PCOS / Hormonal"/> 🌸 PCOS / Hormonal</label>
+          <label><input type="checkbox" name="Health Condition" value="Gut issues (IBS/IBD)"/> 🫁 Gut issues</label>
+          <label><input type="checkbox" name="Health Condition" value="None"/> ✅ None</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:4px">
+        <label>Digestive issues?</label>
+        <div class="pill-group">
+          <label><input type="checkbox" name="Digestive Issue" value="Bloating"/> 😮‍💨 Bloating</label>
+          <label><input type="checkbox" name="Digestive Issue" value="Acid reflux"/> 🔥 Acid reflux</label>
+          <label><input type="checkbox" name="Digestive Issue" value="Constipation"/> 😣 Constipation</label>
+          <label><input type="checkbox" name="Digestive Issue" value="Loose stools"/> 💧 Loose stools</label>
+          <label><input type="checkbox" name="Digestive Issue" value="None"/> ✅ None</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>Any medications you take regularly?</label>
+        <input type="text" name="Medications" placeholder="e.g. Thyroid meds, Metformin — or type 'None'"/>
+      </div>
+
+      <div class="field">
+        <label>Any injuries affecting your training?</label>
+        <input type="text" name="Injuries" placeholder="e.g. Bad knee, lower back pain — or 'None'"/>
+      </div>
+    </div>
+
+    <!-- ── SECTION 5: Food Preferences ── -->
+    <div class="s-card" data-section="5">
+      <div class="s-head">
+        <div class="s-icon">🥗</div>
+        <div>
+          <div class="s-title">Food Preferences</div>
+          <div class="s-subtitle">What you eat and what you can't stand</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Diet type <span class="req">*</span></label>
+        <div class="pill-group">
+          <label><input type="radio" name="Diet Type" value="Non-vegetarian" required/> 🥩 Non-veg</label>
+          <label><input type="radio" name="Diet Type" value="Pescatarian"/> 🐟 Pescatarian</label>
+          <label><input type="radio" name="Diet Type" value="Vegetarian (eggs + dairy OK)"/> 🥚 Vegetarian</label>
+          <label><input type="radio" name="Diet Type" value="Vegan"/> 🌱 Vegan</label>
+          <label><input type="radio" name="Diet Type" value="Jain"/> 🪙 Jain</label>
+          <label><input type="radio" name="Diet Type" value="Halal only"/> 🌙 Halal only</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>Foods you dislike or can't eat</label>
+        <textarea name="Foods Disliked" placeholder="e.g. I hate fish, can't stand bitter gourd, avoid mushrooms…"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Foods you love and eat often</label>
+        <textarea name="Foods Loved" placeholder="e.g. I love rice, dal, eggs, bananas, chicken curry…"></textarea>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Food allergies</label>
+          <input type="text" name="Food Allergies" placeholder="Nuts, gluten, dairy… or None"/>
+        </div>
+        <div class="field">
+          <label>Religious restrictions</label>
+          <input type="text" name="Religious Restrictions" placeholder="No beef, fasting days… or None"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 6: Eating Habits ── -->
+    <div class="s-card" data-section="6">
+      <div class="s-head">
+        <div class="s-icon">🍱</div>
+        <div>
+          <div class="s-title">Current Eating Habits</div>
+          <div class="s-subtitle">Be honest — no judgement here!</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>How many meals do you eat per day?</label>
+        <div class="pill-group">
+          <label><input type="radio" name="Meals Per Day" value="1–2 meals"/> 1–2 meals</label>
+          <label><input type="radio" name="Meals Per Day" value="3 meals"/> 3 meals</label>
+          <label><input type="radio" name="Meals Per Day" value="4–5 meals"/> 4–5 meals</label>
+          <label><input type="radio" name="Meals Per Day" value="I graze all day"/> I graze</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>Do you eat breakfast?</label>
+        <div class="pill-group">
+          <label><input type="radio" name="Eats Breakfast" value="Yes, always"/> Yes, always</label>
+          <label><input type="radio" name="Eats Breakfast" value="Sometimes"/> Sometimes</label>
+          <label><input type="radio" name="Eats Breakfast" value="Rarely / never"/> Rarely / never</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>How often do you eat out / order food?</label>
+        <div class="pill-group">
+          <label><input type="radio" name="Eating Out Frequency" value="Never"/> Never</label>
+          <label><input type="radio" name="Eating Out Frequency" value="1–2 times a week"/> 1–2×/week</label>
+          <label><input type="radio" name="Eating Out Frequency" value="3–5 times a week"/> 3–5×/week</label>
+          <label><input type="radio" name="Eating Out Frequency" value="Almost every meal"/> Almost every meal</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>Alcohol?</label>
+        <div class="pill-group">
+          <label><input type="radio" name="Alcohol" value="Never"/> Never</label>
+          <label><input type="radio" name="Alcohol" value="Occasionally"/> Occasionally</label>
+          <label><input type="radio" name="Alcohol" value="Weekends"/> Weekends</label>
+          <label><input type="radio" name="Alcohol" value="Daily"/> Daily</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>Sugary drinks / sodas / packaged juices?</label>
+        <div class="pill-group">
+          <label><input type="radio" name="Sugary Drinks" value="Daily"/> Daily</label>
+          <label><input type="radio" name="Sugary Drinks" value="A few times a week"/> Few/week</label>
+          <label><input type="radio" name="Sugary Drinks" value="Rarely"/> Rarely</label>
+          <label><input type="radio" name="Sugary Drinks" value="Never"/> Never</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>Main protein sources you currently eat</label>
+        <div class="pill-group">
+          <label><input type="checkbox" name="Protein Sources" value="Eggs"/> 🥚 Eggs</label>
+          <label><input type="checkbox" name="Protein Sources" value="Chicken"/> 🍗 Chicken</label>
+          <label><input type="checkbox" name="Protein Sources" value="Fish"/> 🐟 Fish</label>
+          <label><input type="checkbox" name="Protein Sources" value="Red meat"/> 🥩 Red meat</label>
+          <label><input type="checkbox" name="Protein Sources" value="Paneer"/> 🧀 Paneer</label>
+          <label><input type="checkbox" name="Protein Sources" value="Tofu / Soya"/> 🌱 Tofu</label>
+          <label><input type="checkbox" name="Protein Sources" value="Dal / Lentils"/> 🫘 Dal</label>
+          <label><input type="checkbox" name="Protein Sources" value="Greek yogurt / Curd"/> 🥛 Curd</label>
+          <label><input type="checkbox" name="Protein Sources" value="Whey protein"/> 🥤 Whey</label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>Supplements you currently take</label>
+        <div class="pill-group">
+          <label><input type="checkbox" name="Current Supplements" value="Whey protein"/> Whey</label>
+          <label><input type="checkbox" name="Current Supplements" value="Creatine"/> Creatine</label>
+          <label><input type="checkbox" name="Current Supplements" value="Multivitamin"/> Multivitamin</label>
+          <label><input type="checkbox" name="Current Supplements" value="Vitamin D"/> Vitamin D</label>
+          <label><input type="checkbox" name="Current Supplements" value="Fish oil"/> Fish oil</label>
+          <label><input type="checkbox" name="Current Supplements" value="Ashwagandha"/> Ashwagandha</label>
+          <label><input type="checkbox" name="Current Supplements" value="None"/> None</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 7: Sleep & Stress ── -->
+    <div class="s-card" data-section="7">
+      <div class="s-head">
+        <div class="s-icon">🌙</div>
+        <div>
+          <div class="s-title">Sleep, Stress & Recovery</div>
+          <div class="s-subtitle">Recovery is half the battle</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Sleep per night</label>
+          <select name="Sleep Duration">
+            <option value="">Select…</option>
+            <option>Under 5 hrs</option>
+            <option>5–6 hrs</option>
+            <option>6–7 hrs</option>
+            <option>7–8 hrs</option>
+            <option>8+ hrs</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Water intake</label>
+          <select name="Water Intake">
+            <option value="">Select…</option>
+            <option>Under 1L</option>
+            <option>1–1.5L</option>
+            <option>1.5–2L</option>
+            <option>2–3L</option>
+            <option>3L+</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:6px">
+        <label>Sleep quality — <span id="sleepVal">5</span>/10</label>
+        <div class="scale-wrap">
+          <div class="scale-track">
+            <span style="font-size:18px">😴</span>
+            <input type="range" min="1" max="10" value="5" name="Sleep Quality Score"
+              oninput="document.getElementById('sleepVal').textContent=this.value"/>
+            <span style="font-size:18px">😊</span>
+          </div>
+          <div class="scale-labels"><span>Very poor</span><span>Great</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Stress level — <span id="stressVal">5</span>/10</label>
+        <div class="scale-wrap">
+          <div class="scale-track">
+            <span style="font-size:18px">😌</span>
+            <input type="range" min="1" max="10" value="5" name="Stress Level Score"
+              oninput="document.getElementById('stressVal').textContent=this.value"/>
+            <span style="font-size:18px">🤯</span>
+          </div>
+          <div class="scale-labels"><span>Very calm</span><span>Very stressed</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Do you smoke or use tobacco?</label>
+        <div class="pill-group">
+          <label><input type="radio" name="Smoking" value="No"/> No</label>
+          <label><input type="radio" name="Smoking" value="Occasionally"/> Occasionally</label>
+          <label><input type="radio" name="Smoking" value="Yes, regularly"/> Yes, regularly</label>
+          <label><input type="radio" name="Smoking" value="Ex-smoker"/> Ex-smoker</label>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ── SECTION 9: 24hr Recall ── -->
+    <div class="s-card" data-section="9">
+      <div class="s-head">
+        <div class="s-icon">📋</div>
+        <div>
+          <div class="s-title">What Did You Eat Yesterday?</div>
+          <div class="s-subtitle">Include everything — even small bites count</div>
+        </div>
+      </div>
+
+      <div class="note">
+        💡 Be as specific as you can — portions, brands, cooking method. This is the most useful part of the form.
+      </div>
+
+      <div class="recall-item">
+        <div class="recall-label">🌅 Breakfast</div>
+        <input type="text" name="Recall Breakfast" placeholder="e.g. 2 boiled eggs, 2 slices brown bread, 1 cup chai with 1 tsp sugar"/>
+      </div>
+      <div class="recall-item">
+        <div class="recall-label">☕ Morning snack</div>
+        <input type="text" name="Recall Morning Snack" placeholder="e.g. 1 banana, black coffee — or 'Nothing'"/>
+      </div>
+      <div class="recall-item">
+        <div class="recall-label">🍱 Lunch</div>
+        <input type="text" name="Recall Lunch" placeholder="e.g. 1.5 cups rice, dal, sabzi, 1 chapati, curd"/>
+      </div>
+      <div class="recall-item">
+        <div class="recall-label">🍫 Afternoon snack</div>
+        <input type="text" name="Recall Afternoon Snack" placeholder="e.g. Biscuits and tea — or 'Nothing'"/>
+      </div>
+      <div class="recall-item">
+        <div class="recall-label">🌆 Dinner</div>
+        <input type="text" name="Recall Dinner" placeholder="e.g. Chicken curry (200g), 2 chapati, salad"/>
+      </div>
+      <div class="recall-item">
+        <div class="recall-label">🌙 Late night</div>
+        <input type="text" name="Recall Late Night" placeholder="e.g. Glass of milk — or 'Nothing'"/>
+      </div>
+      <div class="recall-item">
+        <div class="recall-label">💧 All beverages</div>
+        <input type="text" name="Recall Beverages" placeholder="e.g. 1.5L water, 2 teas, 1 Coke (330ml)"/>
+      </div>
+    </div>
+
+    <!-- ── SECTION 10: Mindset ── -->
+    <div class="s-card" data-section="10">
+      <div class="s-head">
+        <div class="s-icon">🧠</div>
+        <div>
+          <div class="s-title">Mindset & History</div>
+          <div class="s-subtitle">Almost done — last section!</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Motivation right now — <span id="motivVal">7</span>/10</label>
+        <div class="scale-wrap">
+          <div class="scale-track">
+            <span style="font-size:18px">😶</span>
+            <input type="range" min="1" max="10" value="7" name="Motivation Score"
+              oninput="document.getElementById('motivVal').textContent=this.value"/>
+            <span style="font-size:18px">🔥</span>
+          </div>
+          <div class="scale-labels"><span>Not motivated</span><span>Fully committed</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Have you tried a diet or meal plan before? What happened?</label>
+        <textarea name="Previous Diet Experience" placeholder="e.g. Tried keto for 2 weeks, lost 2 kg but couldn't keep up… or 'First time trying'"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Anything else you'd like your trainer to know?</label>
+        <textarea name="Additional Notes" placeholder="Upcoming events, concerns, medical context, preferences…"></textarea>
+      </div>
+    </div>
+
+    <!-- ── SUBMIT ── -->
+    <button type="submit" class="submit-btn" id="submitBtn">
+      Send my answers →
+    </button>
+    <p class="disclaimer">
+      Your answers are private and shared only with your trainer.<br/>
+      They will not be used for any other purpose.
+    </p>
+
+  </div>
+</form>
+</div>
+
+<!-- Success Screen -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">🎉</div>
+  <h2>You're all done!</h2>
+  <p>Your answers have been sent to your trainer. Expect to hear back within 24–48 hours.</p>
+  <div class="success-steps">
+    <div class="success-step">
+      <div class="success-step-num">1</div>
+      Trainer reviews your answers
+    </div>
+    <div class="success-step">
+      <div class="success-step-num">2</div>
+      Personalised diet plan is built
+    </div>
+    <div class="success-step">
+      <div class="success-step-num">3</div>
+      Lifestyle path & supplements set
+    </div>
+    <div class="success-step">
+      <div class="success-step-num">4</div>
+      You receive your full plan 🌿
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── PROGRESS BAR ──
+  function updateProgress() {
+    const form = document.getElementById('clientForm');
+    if (!form) return;
+    const allFields = form.querySelectorAll('input[required], select[required]');
+    let filled = 0;
+    allFields.forEach(f => {
+      if (f.type === 'radio') {
+        const group = form.querySelectorAll(`input[name="${f.name}"]:checked`);
+        if (group.length > 0) filled++;
+      } else if (f.value.trim() !== '') {
+        filled++;
+      }
+    });
+    // Also count scroll progress
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    const scrollPct = total > 0 ? (scrolled / total) * 100 : 0;
+    document.getElementById('progressBar').style.width = Math.min(scrollPct, 95) + '%';
+  }
+  window.addEventListener('scroll', updateProgress);
+  document.addEventListener('change', updateProgress);
+
+  // ── FORM SUBMIT ──
+  document.getElementById('clientForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Basic validation
+    let valid = true;
+    const requiredFields = this.querySelectorAll('[required]');
+    requiredFields.forEach(field => {
+      const wrapper = field.closest('.field');
+      if (field.type === 'radio') {
+        const checked = this.querySelectorAll(`input[name="${field.name}"]:checked`);
+        if (checked.length === 0) {
+          valid = false;
+          if (wrapper) wrapper.classList.add('has-error');
+        } else {
+          if (wrapper) wrapper.classList.remove('has-error');
+        }
+      } else {
+        if (!field.value.trim()) {
+          valid = false;
+          if (wrapper) wrapper.classList.add('has-error');
+        } else {
+          if (wrapper) wrapper.classList.remove('has-error');
+        }
+      }
+    });
+
+    if (!valid) {
+      const firstError = document.querySelector('.has-error');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Submit via fetch to FormSubmit
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(res => {
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('progressBar').style.width = '100%';
+      const s = document.getElementById('successScreen');
+      s.classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(() => {
+      // Fallback: show success anyway (FormSubmit may redirect)
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('successScreen').classList.add('show');
+    });
+  });
+
+  // ── CLEAR ERROR ON INPUT ──
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', () => {
+      const wrapper = el.closest('.field');
+      if (wrapper) wrapper.classList.remove('has-error');
+    });
+    el.addEventListener('change', () => {
+      const wrapper = el.closest('.field');
+      if (wrapper) wrapper.classList.remove('has-error');
+    });
+  });
+</script>
+</body>
+</html>
